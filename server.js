@@ -29,13 +29,25 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-// Middleware Configuration
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://web-final-frontend-theta.vercel.app:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+
+// Configura CORS para permitir ambos orígenes (local y producción)
+const allowedOrigins = [
+  "http://localhost:3000", // Desarrollo local
+  "https://web-final-frontend-theta.vercel.app", // Frontend en Vercel
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Origen no permitido por CORS"));
+      }
+    },
+    credentials: true, // Si usas cookies o autenticación
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
