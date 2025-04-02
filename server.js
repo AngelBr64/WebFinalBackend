@@ -11,16 +11,9 @@ const QRCode = require('qrcode');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Initialize Firebase
-let serviceAccount;
-try {
-  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-  } else {
-    serviceAccount = require('./serviceAccountKey.json');
-  }
-} catch (error) {
-  console.error('Error loading Firebase service account:', error);
+// Initialize Firebase (versión segura)
+if (!process.env.FIREBASE_PRIVATE_KEY) {
+  console.error('Error: FIREBASE_PRIVATE_KEY no está definido en las variables de entorno');
   process.exit(1);
 }
 
