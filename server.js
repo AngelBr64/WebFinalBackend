@@ -30,35 +30,13 @@ admin.initializeApp({
 const db = admin.firestore();
 
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://web-final-frontend-theta.vercel.app",
-  // Agrega otros dominios permitidos aquí
-];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.warn(`⚠️ Intento de acceso desde origen no permitido: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 200 // Para navegadores antiguos
-};
-
-app.use(cors(corsOptions));
-
-// Manejar explícitamente las solicitudes OPTIONS (preflight)
-app.options('*', cors(corsOptions));
-
-// Middleware Configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://web-final-frontend-theta.vercel.app:3000',
+  origin: [
+    process.env.FRONTEND_URL || 'https://web-final-frontend-theta.vercel.app',
+    'http://localhost:3000', // Para desarrollo local
+    'https://tu-backend-en-vercel.vercel.app' // Añade esta línea
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
