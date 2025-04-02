@@ -1418,6 +1418,6 @@ app.post('/api/contact', async (req, res) => {
 
 app.listen(port, () => {
   webfinalbackend-production-c682.up.railway.app
-  console.log(`Server running on http://webfinalbackend-production-c682.up.railway.app:${port}`);
+  console.log(`Server running on port:${port}`);
   console.log(`Audio files served from: ${uploadDir}`);
 });
