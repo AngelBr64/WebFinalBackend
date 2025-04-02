@@ -8,7 +8,6 @@ const fs = require('fs');
 const mime = require('mime-types');
 const speakeasy = require('speakeasy');
 const QRCode = require('qrcode');
-
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -25,9 +24,14 @@ try {
   process.exit(1);
 }
 
+// Inicialización segura de Firebase usando variables de entorno
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.FIREBASE_DATABASE_URL || 'https://web-final-73344.firebaseio.com',
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL
+  }),
+  databaseURL: process.env.FIREBASE_DATABASE_URL
 });
 
 const db = admin.firestore();
@@ -1361,7 +1365,6 @@ app.get('/user-posts/:userId', async (req, res) => {
 });
 
 
-require('dotenv').config();
 
 
 // Verifica la conexión al iniciar el servidor
