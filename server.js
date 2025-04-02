@@ -30,24 +30,39 @@ admin.initializeApp({
 const db = admin.firestore();
 
 
-// Configura CORS para permitir ambos orígenes (local y producción)
 const allowedOrigins = [
-  "http://localhost:3000", // Desarrollo local
-  "https://web-final-frontend-theta.vercel.app", // Frontend en Vercel
+  "http://localhost:3000",
+  "https://web-final-frontend-theta.vercel.app",
+  // Agrega otros dominios permitidos aquí
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Origen no permitido por CORS"));
-      }
-    },
-    credentials: true, // Si usas cookies o autenticación
-  })
-);
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`⚠️ Intento de acceso desde origen no permitido: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200 // Para navegadores antiguos
+};
+
+app.use(cors(corsOptions));
+
+// Manejar explícitamente las solicitudes OPTIONS (preflight)
+app.options('*', cors(corsOptions));
+
+// Middleware Configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'https://web-final-frontend-theta.vercel.app:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
