@@ -31,7 +31,7 @@ const db = admin.firestore();
 
 // Middleware Configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || 'https://web-final-frontend-theta.vercel.app:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -1159,7 +1159,7 @@ app.post('/request-password-reset', async (req, res) => {
     });
 
     // Send email with reset link
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${token}&email=${encodeURIComponent(email)}`;
+    const resetUrl = `${process.env.FRONTEND_URL || 'https://web-final-frontend-theta.vercel.app:3000'}/reset-password?token=${token}&email=${encodeURIComponent(email)}`;
     
     const mailOptions = {
       from: process.env.EMAIL_USER,
